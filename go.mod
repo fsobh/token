@@ -1,4 +1,4 @@
-module token
+module github.com/fsobh/token
 
 go 1.23.2
 
