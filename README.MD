@@ -13,7 +13,7 @@ A Golang module for generating various types of authentication tokens seamlessly
 ## Installation
 Get started by installing the package:
 
-```sh
+```sh 
 go get github.com/fsobh/token
 ```
 
@@ -96,8 +96,20 @@ func main() {
 	if err != nil {
 		panic(fmt.Errorf("cannot marshal response to JSON: %w", err))
 	}
+	
+	fmt.Println(string(jsonResponse))
 
-	// Print the JSON response
+	//example to verify :
+
+	payload, err := jwtMaker.VerifyToken(accessToken)
+
+	jsonResponse, err = json.MarshalIndent(payload, "", "  ")
+
+	if err != nil {
+		panic(fmt.Errorf("cannot marshal response to JSON: %w", err))
+	}
+
+
 	fmt.Println(string(jsonResponse))
 }
 ```
@@ -113,6 +125,15 @@ func main() {
   "access_token_expired_at": "2024-11-30T15:41:55.6739845-05:00",
   "refresh_token_expired_at": "2024-12-01T14:41:55.6750647-05:00"
 }
+
+//verify output
+{
+  "id": "c3c2b27e-0f96-4160-9b1d-4613dc87ec73",
+  "username": "foo",
+  "issued_at": "2024-12-01T00:33:32.9286814-05:00",
+  "expired_at": "2024-12-01T01:33:32.9286814-05:00"
+}
+
 ```
 2. **PASETO SYMMETRIC**
 ```go
@@ -159,13 +180,13 @@ func main() {
 		panic(fmt.Errorf("cannot create token maker: %w", err))
 	}
 
-	accessToken, payload, err := pasetoMaker.CreateToken(user.Username, accessTokenDuration)
+	accessToken, accessPayload, err := pasetoMaker.CreateToken(user.Username, accessTokenDuration)
 
 	if err != nil {
 		panic(fmt.Errorf("cannot create access token : %w", err))
 	}
 
-	refreshToken, payload, err := pasetoMaker.CreateToken(user.Username, refreshTokenDuration)
+	refreshToken, refreshPayload, err := pasetoMaker.CreateToken(user.Username, refreshTokenDuration)
 
 	if err != nil {
 		panic(fmt.Errorf("cannot create refresh token : %w", err))
@@ -177,11 +198,22 @@ func main() {
 		User:                  *user,
 		AccessToken:           accessToken,
 		RefreshToken:          refreshToken,
-		AccessTokenExpiredAt:  payload.ExpiredAt,
-		RefreshTokenExpiredAt: payload.ExpiredAt,
+		AccessTokenExpiredAt:  accessPayload.ExpiredAt,
+		RefreshTokenExpiredAt: refreshPayload.ExpiredAt,
 	}
 
 	jsonResponse, err := json.MarshalIndent(response, "", "  ")
+
+	if err != nil {
+		panic(fmt.Errorf("cannot marshal response to JSON: %w", err))
+	}
+
+	fmt.Println(string(jsonResponse))
+
+	//verify : 
+	payload, err := pasetoMaker.VerifyToken(accessToken)
+
+	jsonResponse, err = json.MarshalIndent(payload, "", "  ")
 
 	if err != nil {
 		panic(fmt.Errorf("cannot marshal response to JSON: %w", err))
@@ -202,6 +234,14 @@ func main() {
   "access_token_expired_at": "2024-12-01T14:40:44.819082-05:00",
   "refresh_token_expired_at": "2024-12-01T14:40:44.819082-05:00"
 }
+//verify output
+{
+  "id": "0ecebe42-5e34-450b-b80a-bf115dc94494",
+  "username": "foo",
+  "issued_at": "2024-12-01T00:42:08.088248-05:00",
+  "expired_at": "2024-12-01T01:42:08.088248-05:00"
+}
+
 
 ```
 3. **PASETO ASYMMETRIC**
