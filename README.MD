@@ -22,7 +22,7 @@ go get github.com/fsobh/token
 
 ## Usage (access + refresh token example)
 
-#### Three types of tokens are supported:
+#### Four types of tokens are supported:
 
 1. **JWT**
 ```go
