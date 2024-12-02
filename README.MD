@@ -1,7 +1,7 @@
 
 # Authentication token module for Golang
 
-A Golang module for generating various types of authentication tokens seamlessly using [JWT](https://en.wikipedia.org/wiki/JSON_Web_Token) or [PASETO](https://paseto.io/).
+A Golang module for generating & verifying various types of authentication tokens seamlessly using [JWT](https://en.wikipedia.org/wiki/JSON_Web_Token) or [PASETO](https://paseto.io/).
 
 ## Features
 - **JSON WEB TOKEN**: Generate JWT tokens.
