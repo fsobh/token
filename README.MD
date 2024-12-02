@@ -308,28 +308,38 @@ func main() {
 		Email:    "bar@example.com",
 	}
 
-	accessToken, payload, err := pasetoAsymMaker.CreateToken(user.Username, accessTokenDuration)
+	accessToken, accessPayload, err := pasetoAsymMaker.CreateToken(user.Username, accessTokenDuration)
 
 	if err != nil {
 		panic(fmt.Errorf("cannot create access token : %w", err))
 	}
 
-	refreshToken, payload, err := pasetoAsymMaker.CreateToken(user.Username, refreshTokenDuration)
+	refreshToken, refreshPayload, err := pasetoAsymMaker.CreateToken(user.Username, refreshTokenDuration)
 
 	if err != nil {
 		panic(fmt.Errorf("cannot create refresh token : %w", err))
 	}
 
-	// example response
+	
 	response := &Response{
 		User:                  *user,
 		AccessToken:           accessToken,
 		RefreshToken:          refreshToken,
-		AccessTokenExpiredAt:  payload.ExpiredAt,
-		RefreshTokenExpiredAt: payload.ExpiredAt,
+		AccessTokenExpiredAt:  accessPayload.ExpiredAt,
+		RefreshTokenExpiredAt: refreshPayload.ExpiredAt,
 	}
 
 	jsonResponse, err := json.MarshalIndent(response, "", "  ")
+
+	if err != nil {
+		panic(fmt.Errorf("cannot marshal response to JSON: %w", err))
+	}
+
+	fmt.Println(string(jsonResponse))
+
+	payload, err := pasetoAsymMaker.VerifyToken(accessToken)
+
+	jsonResponse, err = json.MarshalIndent(payload, "", "  ")
 
 	if err != nil {
 		panic(fmt.Errorf("cannot marshal response to JSON: %w", err))
@@ -361,7 +371,127 @@ func main() {
 }
 
 ```
+4. **JWT ASYMMETRIC (Ed25519 public/private key pair)**
+```go
+package main
 
+import (
+	"encoding/base64"
+	"encoding/json"
+	"fmt"
+	"os"
+	"github.com/fsobh/token"
+	"time"
+)
+
+type User struct {
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	//...Other fields depending on the application
+}
+
+type Response struct {
+	User                  User      `json:"user"`
+	AccessToken           string    `json:"access_token"`
+	RefreshToken          string    `json:"refresh_token"`
+	AccessTokenExpiredAt  time.Time `json:"access_token_expired_at"`
+	RefreshTokenExpiredAt time.Time `json:"refresh_token_expired_at"`
+}
+
+func base64StringToBytes(keyString string) []byte {
+	key, err := base64.StdEncoding.DecodeString(keyString)
+	if err != nil {
+		_ = fmt.Errorf("cannot decode Keys: %w", err)
+		os.Exit(1)
+	}
+	return key
+}
+
+func main() {
+	/*
+	 Never paste your credentials directly in the code for safety reasons
+	 Recommended : Store these in environment variables using [viper](https://github.com/spf13/viper)
+	*/
+	accessTokenDuration, _ := time.ParseDuration("1h")
+	refreshTokenDuration, _ := time.ParseDuration("24h")
+	privateKeyString := "kcqWCAG3yLjE7lvuz6SzDlR9Ml5yj9mU1vX+azJD6c4XwTN8vzSL3gN+hiLlDdcfTdMDbck6F2M279E9aYZvqQ=="
+	publicKeyString := "F8EzfL80i94DfoYi5Q3XH03TA23JOhdjNu/RPWmGb6k="
+
+	publicKey := base64StringToBytes(publicKeyString)
+	privateKey := base64StringToBytes(privateKeyString)
+
+	jwtAsymMaker, err := token.NewAsymJWTMaker(privateKey, publicKey) // Create a new JWT maker
+	if err != nil {
+		panic(fmt.Errorf("cannot create token maker: %w", err))
+	}
+
+	user := &User{
+		Username: "foo",
+		Email:    "bar@example.com",
+	}
+
+	accessToken, accessPayload, err := jwtAsymMaker.CreateToken(user.Username, accessTokenDuration)
+	if err != nil {
+		panic(fmt.Errorf("cannot create access token: %w", err))
+	}
+
+	refreshToken, refreshPayload, err := jwtAsymMaker.CreateToken(user.Username, refreshTokenDuration)
+	if err != nil {
+		panic(fmt.Errorf("cannot create refresh token: %w", err))
+	}
+
+	response := &Response{
+		User:                  *user,
+		AccessToken:           accessToken,
+		RefreshToken:          refreshToken,
+		AccessTokenExpiredAt:  accessPayload.ExpiredAt,
+		RefreshTokenExpiredAt: refreshPayload.ExpiredAt,
+	}
+
+	jsonResponse, err := json.MarshalIndent(response, "", "  ")
+	if err != nil {
+		panic(fmt.Errorf("cannot marshal response to JSON: %w", err))
+	}
+
+	fmt.Println(string(jsonResponse))
+
+	payload, err := jwtAsymMaker.VerifyToken(accessToken)
+	if err != nil {
+		panic(fmt.Errorf("cannot verify token: %w", err))
+	}
+
+	jsonResponse, err = json.MarshalIndent(payload, "", "  ")
+	if err != nil {
+		panic(fmt.Errorf("cannot marshal response to JSON: %w", err))
+	}
+
+	fmt.Println(string(jsonResponse))
+}
+```
+**output**:
+```json
+{
+  "user": {
+    "username": "foo",
+    "email": "bar@example.com"
+  },
+  "access_token": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpZCI6IjliOTJiNWIyLWIwMWMtNDliZC05ZTExLTkwMTRjMjM4OTcyNCIsInVzZXJuYW1lIjoiZm9vIiwiaXNzdWVkX2F0IjoiMjAyNC0xMi0wMlQxMjo1NzoxNS4wNjQyMDgtMDU6MDAiLCJleHBpcmVkX2F0IjoiMjAyNC0xMi0wMlQxMzo1NzoxNS4wNjQyMDgtMDU6MDAifQ.NZw881tsaA7CBMXOe51y2OQ7dsRximc6dz0-rdQZN-ofqn2OoVCJ0rHqgfLAhOIxSiPZRgNnfvYG38VLV4fYAw",
+  "refresh_token": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFjY2NhMzI2LTFjZWUtNDNiYy05N2EyLWUwZjJmNWJhYjc5MCIsInVzZXJuYW1lIjoiZm9vIiwiaXNzdWVkX2F0IjoiMjAyNC0xMi0wMlQxMjo1NzoxNS4wNjUyNTcyLTA1OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjQtMTItMDNUMTI6NTc6MTUuMDY1MjU3Mi0wNTowMCJ9.rN5R43eLq0BNMcGnNXHJTmTZwnbSsKQAyfaJ7Mf0SKctf__GEk2iJxauanc4w73scw0vEAn1kHQmQjvAX7t5AQ",
+  "access_token_expired_at": "2024-12-02T13:57:15.064208-05:00",
+  "refresh_token_expired_at": "2024-12-03T12:57:15.0652572-05:00"
+}
+
+//verify output
+{
+  "id": "9b92b5b2-b01c-49bd-9e11-9014c2389724",
+  "username": "foo",
+  "issued_at": "2024-12-02T12:57:15.064208-05:00",
+  "expired_at": "2024-12-02T13:57:15.064208-05:00"
+}
+
+
+
+```
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
