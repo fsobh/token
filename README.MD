@@ -357,19 +357,20 @@ func main() {
     "username": "foo",
     "email": "bar@example.com"
   },
-  "access_token": "v2.public.eyJpZCI6IjU0MGEyN2ViLTBkMGMtNDk1MS04MzU1LTFjMTQ3MjZlM2E2MSIsInVzZXJuYW1lIjoiZm9vIiwiaXNzdWVkX2F0IjoiMjAyNC0xMi0wMVQyMzoyMTozNS4zMjg0NTA5LTA1OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjQtMTItMDJUMDA6MjE6MzUuMzI4NDUwOS0wNTowMCJ9EM31KixxjPqV9SiMyCSrapsMuBfWB5ONSFOxGuSQ4uD14ZtAbzFvfBfAFrCmdQNqo4DfxDN_S8-DQFjjhsMHDQ.bnVsbA",
-  "refresh_token": "v2.public.eyJpZCI6IjMwOGIxODZhLTY2MjktNDk5YS1iZTQ0LWQ5NmYwODAwMDI3OSIsInVzZXJuYW1lIjoiZm9vIiwiaXNzdWVkX2F0IjoiMjAyNC0xMi0wMVQyMzoyMTozNS4zMjk0OTA3LTA1OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjQtMTItMDJUMjM6MjE6MzUuMzI5NDkwNy0wNTowMCJ91HMTK9jO54SHHgxgH2cNKfNq8oCP6modxQOrwbImG6JchZk1dKR4PgHJzGlFLmJXE_R6J3unsDGA579Npf4_Aw.bnVsbA",
-  "access_token_expired_at": "2024-12-02T00:21:35.3284509-05:00",
-  "refresh_token_expired_at": "2024-12-02T23:21:35.3294907-05:00"
+  "access_token": "v2.public.eyJpZCI6IjU5ODZhYjAxLTM3MDAtNDRhYS04NzA1LTZhNDBiNWYxZjYyNyIsInVzZXJuYW1lIjoiZm9vIiwiaXNzdWVkX2F0IjoiMjAyNC0xMi0wMlQxMzo0MToxNi4zMTIxODI4LTA1OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjQtMTItMDJUMTQ6NDE6MTYuMzEyMTgyOC0wNTowMCJ9mDp-4UpeiPNSUJdkboSdgvp2rT3dZhDa8wKsBq2CImtnjVwkekU2JfZMBltCwUHEAAxx-GqNgm5N3SlBdPwkAA.bnVsbA",
+  "refresh_token": "v2.public.eyJpZCI6IjZhYWJkNzEyLWEyOTEtNDc0ZS1iYTEyLTNjYjdlMmFmM2RkNyIsInVzZXJuYW1lIjoiZm9vIiwiaXNzdWVkX2F0IjoiMjAyNC0xMi0wMlQxMzo0MToxNi4zMTMyMTQtMDU6MDAiLCJleHBpcmVkX2F0IjoiMjAyNC0xMi0wM1QxMzo0MToxNi4zMTMyMTQtMDU6MDAifWtsySYrze2oDHq954KesVgifMT_sFcyf686jnqm9EUbOUNW8S-tBZxtZqLcoCEuDmY8Pu6OqVX0yVaHp6cj7Qs.bnVsbA",
+  "access_token_expired_at": "2024-12-02T14:41:16.3121828-05:00",
+  "refresh_token_expired_at": "2024-12-03T13:41:16.313214-05:00"
 }
 
-//verify output
+//verify output:
 {
-  "id": "540a27eb-0d0c-4951-8355-1c14726e3a61",
+  "id": "5986ab01-3700-44aa-8705-6a40b5f1f627",
   "username": "foo",
-  "issued_at": "2024-12-01T23:21:35.3284509-05:00",
-  "expired_at": "2024-12-02T00:21:35.3284509-05:00"
+  "issued_at": "2024-12-02T13:41:16.3121828-05:00",
+  "expired_at": "2024-12-02T14:41:16.3121828-05:00"
 }
+
 
 ```
 4. **JWT ASYMMETRIC (Ed25519 public/private key pair)**
