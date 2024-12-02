@@ -234,6 +234,7 @@ func main() {
   "access_token_expired_at": "2024-12-01T14:40:44.819082-05:00",
   "refresh_token_expired_at": "2024-12-01T14:40:44.819082-05:00"
 }
+
 //verify output
 {
   "id": "0ecebe42-5e34-450b-b80a-bf115dc94494",
@@ -289,8 +290,8 @@ func main() {
 	*/
 	accessTokenDuration, _ := time.ParseDuration("1h")
 	refreshTokenDuration, _ := time.ParseDuration("24h")
-	privateKeyString := "B1oTYX0S4+qGfPQSb3DZ6uEo1KyciMTDKp7WnYFPxLEMP5lK1h9TYcMzWJx7ZmID6QtVeKdPW5eTpF7kUKXM6w=="
-	publicKeyString := "Mh9TYcMzWJx7ZmID6QtVeKdPW5eTpF7kUKXM6z=="
+	privateKeyString := "zcejpWP9EMOcfJfKReRztKqMcEjJGuKO9ONX3ITN+CFZ50OhHy8R9yTirM16ipNJSQaxASttFhJYBNaJWP/rzw=="
+	publicKeyString := "WedDoR8vEfck4qzNeoqTSUkGsQErbRYSWATWiVj/688="
 
 	publicKey := base64StringToBytes(publicKeyString)
 
@@ -345,10 +346,18 @@ func main() {
     "username": "foo",
     "email": "bar@example.com"
   },
-  "access_token": "v2.public.eyJpZCI6IjM2ZDlkMmE0LTU5NzYtNGI0OC04MDlhLWJiZTBjNDdjNjMxOCIsInVzZXJuYW1lIjoiZm9vIiwiaXNzdWVkX2F0IjoiMjAyNC0xMS0zMFQxNDozODoxNy4yODQ1ODA2LTA1OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjQtMTEtMzBUMTU6Mzg6MTcuMjg0NTgwNi0wNTowMCJ9BMiK9rMEpRpRQkVrMU6Iykyh5mHZKsP6grXmm_1wFQfvNcaeFQ_9O-b8i3i7iW1GAv7p937iEhrGnkkiRgZlAw.bnVsbA",
-  "refresh_token": "v2.public.eyJpZCI6IjgxNDQzNzJlLTIyYjgtNDY5Ny04ODYwLTlhZWZlN2RjMjJhMyIsInVzZXJuYW1lIjoiZm9vIiwiaXNzdWVkX2F0IjoiMjAyNC0xMS0zMFQxNDozODoxNy4yODY2NzQ3LTA1OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjQtMTItMDFUMTQ6Mzg6MTcuMjg2Njc0Ny0wNTowMCJ9Io7wN7nq08gNOrSDS2HiekqvaMWOqH5lua0beCa0TZsvfju9kxzviMn7kcrzuVZU4ykgT_GxmIpPrO5WjWvSBg.bnVsbA",
-  "access_token_expired_at": "2024-12-01T14:38:17.2866747-05:00",
-  "refresh_token_expired_at": "2024-12-01T14:38:17.2866747-05:00"
+  "access_token": "v2.public.eyJpZCI6IjU0MGEyN2ViLTBkMGMtNDk1MS04MzU1LTFjMTQ3MjZlM2E2MSIsInVzZXJuYW1lIjoiZm9vIiwiaXNzdWVkX2F0IjoiMjAyNC0xMi0wMVQyMzoyMTozNS4zMjg0NTA5LTA1OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjQtMTItMDJUMDA6MjE6MzUuMzI4NDUwOS0wNTowMCJ9EM31KixxjPqV9SiMyCSrapsMuBfWB5ONSFOxGuSQ4uD14ZtAbzFvfBfAFrCmdQNqo4DfxDN_S8-DQFjjhsMHDQ.bnVsbA",
+  "refresh_token": "v2.public.eyJpZCI6IjMwOGIxODZhLTY2MjktNDk5YS1iZTQ0LWQ5NmYwODAwMDI3OSIsInVzZXJuYW1lIjoiZm9vIiwiaXNzdWVkX2F0IjoiMjAyNC0xMi0wMVQyMzoyMTozNS4zMjk0OTA3LTA1OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjQtMTItMDJUMjM6MjE6MzUuMzI5NDkwNy0wNTowMCJ91HMTK9jO54SHHgxgH2cNKfNq8oCP6modxQOrwbImG6JchZk1dKR4PgHJzGlFLmJXE_R6J3unsDGA579Npf4_Aw.bnVsbA",
+  "access_token_expired_at": "2024-12-02T00:21:35.3284509-05:00",
+  "refresh_token_expired_at": "2024-12-02T23:21:35.3294907-05:00"
+}
+
+//verify output
+{
+  "id": "540a27eb-0d0c-4951-8355-1c14726e3a61",
+  "username": "foo",
+  "issued_at": "2024-12-01T23:21:35.3284509-05:00",
+  "expired_at": "2024-12-02T00:21:35.3284509-05:00"
 }
 
 ```
