@@ -245,7 +245,7 @@ func main() {
 
 
 ```
-3. **PASETO ASYMMETRIC**
+3. **PASETO ASYMMETRIC (Ed25519 public/private key pair)**
 ```go
 package main
 
