@@ -24,7 +24,7 @@ go get github.com/fsobh/token
 
 #### Four types of tokens are supported:
 
-1. **JWT**
+1. **JWT SYMMETRIC**
 ```go
 package main
 
