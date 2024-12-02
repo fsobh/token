@@ -8,8 +8,9 @@ import (
 
 // Different types of token Errors we will return
 var (
-	ErrExpiredToken = errors.New("token has expired")
-	ErrInvalidToken = errors.New("token is invalid")
+	ErrExpiredToken  = errors.New("token has expired")
+	ErrInvalidToken  = errors.New("token is invalid")
+	ErrInvalidMethod = errors.New("unexpected signing method")
 )
 
 // Payload will hold payload data of token
