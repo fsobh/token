@@ -4,9 +4,10 @@
 A Golang module for generating & verifying various types of authentication tokens seamlessly using [JWT](https://en.wikipedia.org/wiki/JSON_Web_Token) or [PASETO](https://paseto.io/).
 
 ## Features
-- **JSON WEB TOKEN**: Generate JWT tokens.
+- **JSON WEB TOKEN SYMMETRIC**: Generate Symmetric JWT tokens.
+- **JSON WEB TOKEN ASYMMETRIC**: Generate Asymmetric JWT tokens.
 - **PASETO SYMMETRIC**: Generate Symmetric PASETO tokens.
-- **PASETO ASYMMETRICAL**: Generate ASymmetrical PASETO tokens.
+- **PASETO ASYMMETRICAL**: Generate Asymmetrical PASETO tokens.
 
 ---
 
