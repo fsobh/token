@@ -230,19 +230,19 @@ func main() {
     "username": "foo",
     "email": "bar@example.com"
   },
-  "access_token": "v2.local.4r-RKdIVKKA-5PuiIl2Rmonq-KY3FsAJzFnWFXT3wycrqt6m0w8DSCTxC51w3qo4kH53M1uXp-bT0xqELU3nZ3C3t8ZFxsV1lzbXHXPWCyoFRWoq4ibTREcNWjShR9S3AelCDPCjMs6wfP8qPJj6nu2aMw2c1IIP_kKL6wxnf-uHieXWM5BNPzk45iUb-T1NqXD_RjjCjdQ0hpvb1FOlAYyu1-jZpLyG11ygiHWB7m3DYfTRt8yS2lBsGP68vNnLjtGkLbU.bnVsbA",
-  "refresh_token": "v2.local.mk_fdz7GuGhXJgH2nd3yfksnc-k8JTXeSMWpMNciS9kfShKyrKXmaGLFiUYGTiMkSMSKMugGqN-rVqPmbp7JG0XNpPxWiiEzMHw3sj9cayUJaBKBD_Rx1XtdcCCSzfEtxp5AVkA9qfHrE6Q44NasDpmeSylevFyI_CTwJRP7NEb4UIE5NevdbLxJcrsub7t8CvaVekxdBaJbTRHg9wFgO_qXYhTD7r9jWoNQcm5ea977is7Y8ZtHZNx5ACYn0XthsFJg8jw.bnVsbA",
-  "access_token_expired_at": "2024-12-01T14:40:44.819082-05:00",
-  "refresh_token_expired_at": "2024-12-01T14:40:44.819082-05:00"
+  "access_token": "v2.local.7iafWVlEHElGt2m_hr09wY0cP6S4A3f-6NyT34DZlXT6SSisDXvglXHqap0YlcRX0P-o-7bu5JDvxjy6xwD3satHAYtqevg5LptJsjnvP6dHshtBbpuSIYRk6eHhMZV9AXbXS2O1iN6aeD3GvmHmevWsEsdTeaD5p9vs0R5V9pm9yi-hOy76tjMN8giIZNEMyp6yeGnR51HjTh6X1a0iJeKSvvAB8mLppEQQBlTDoxRuM44gxIA9msq8oTtl-8UTBMO8RMH9KQ.bnVsbA",
+  "refresh_token": "v2.local.5UXHQUvZbuC9uZEMgYecmbfFS0ddct4RosKIV1QUpHYiDb-aMHuW2cAYGl2MfoIfB2FnEy88ktuKyJwlaZXM-3RJeUN7HfnBemJiCekhKXKhil5uC3-wUP20-cFId95xfMNvctjHXyK7KEWWHcFiABAKZU0UofbSU78JOcSMFeli04DVJp4ZLQlqII5-dAsgDhmWKK_wPAK9bx7HWhk0jTQ3ruopi_xjcJqTxTjukSPWCCSkJLRhciPe4HLf_ZJVTZzo_XSXJw.bnVsbA",
+  "access_token_expired_at": "2024-12-02T14:36:20.9491139-05:00",
+  "refresh_token_expired_at": "2024-12-03T13:36:20.9496305-05:00"
+}
+// verify output :
+{
+  "id": "3394f870-3eb4-49d5-8c98-afc498e18f6d",
+  "username": "foo",
+  "issued_at": "2024-12-02T13:36:20.9491139-05:00",
+  "expired_at": "2024-12-02T14:36:20.9491139-05:00"
 }
 
-//verify output
-{
-  "id": "0ecebe42-5e34-450b-b80a-bf115dc94494",
-  "username": "foo",
-  "issued_at": "2024-12-01T00:42:08.088248-05:00",
-  "expired_at": "2024-12-01T01:42:08.088248-05:00"
-}
 
 
 ```
