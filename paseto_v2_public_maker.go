@@ -6,14 +6,14 @@ import (
 	"time"
 )
 
-type AsymPasetoMaker struct {
+type PasetoV2Public struct {
 	paseto     *paseto.V2
 	privateKey ed25519.PrivateKey
 	publicKey  ed25519.PublicKey
 }
 
-func NewAsymPasetoMaker(privateKey ed25519.PrivateKey, publicKey ed25519.PublicKey) (Maker, error) {
-	maker := &AsymPasetoMaker{
+func NewPasetoV2Public(privateKey ed25519.PrivateKey, publicKey ed25519.PublicKey) (Maker, error) {
+	maker := &PasetoV2Public{
 		paseto:     paseto.NewV2(),
 		privateKey: privateKey,
 		publicKey:  publicKey,
@@ -22,7 +22,7 @@ func NewAsymPasetoMaker(privateKey ed25519.PrivateKey, publicKey ed25519.PublicK
 	return maker, nil
 }
 
-func (maker *AsymPasetoMaker) CreateToken(username string, duration time.Duration) (string, *Payload, error) {
+func (maker *PasetoV2Public) CreateToken(username string, duration time.Duration) (string, *Payload, error) {
 	payload, err := NewPayload(username, duration)
 
 	if err != nil {
@@ -34,7 +34,7 @@ func (maker *AsymPasetoMaker) CreateToken(username string, duration time.Duratio
 	return token, payload, err
 }
 
-func (maker *AsymPasetoMaker) VerifyToken(token string) (*Payload, error) {
+func (maker *PasetoV2Public) VerifyToken(token string) (*Payload, error) {
 	payload := &Payload{}
 	err := maker.paseto.Verify(token, maker.publicKey, payload, nil)
 

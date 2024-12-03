@@ -7,19 +7,19 @@ import (
 	"time"
 )
 
-type PasetoMaker struct {
+type PasetoV2Local struct {
 	paseto      *paseto.V2
 	symmetricKy []byte
 }
 
-func NewPasetoMaker(symmetricKey string) (Maker, error) {
+func NewPasetoV2Local(symmetricKey string) (Maker, error) {
 
 	//Make sure the key is of same length as a paseto symmetric key
 	if len(symmetricKey) != chacha20poly1305.KeySize {
 		return nil, fmt.Errorf("invalid key size : must be %d characters", chacha20poly1305.KeySize)
 	}
 
-	maker := &PasetoMaker{
+	maker := &PasetoV2Local{
 		paseto:      paseto.NewV2(),
 		symmetricKy: []byte(symmetricKey),
 	}
@@ -27,7 +27,7 @@ func NewPasetoMaker(symmetricKey string) (Maker, error) {
 	return maker, nil
 }
 
-func (maker *PasetoMaker) CreateToken(username string, duration time.Duration) (string, *Payload, error) {
+func (maker *PasetoV2Local) CreateToken(username string, duration time.Duration) (string, *Payload, error) {
 	payload, err := NewPayload(username, duration)
 	if err != nil {
 		return "", payload, err
@@ -38,7 +38,7 @@ func (maker *PasetoMaker) CreateToken(username string, duration time.Duration) (
 	return token, payload, err
 }
 
-func (maker *PasetoMaker) VerifyToken(token string) (*Payload, error) {
+func (maker *PasetoV2Local) VerifyToken(token string) (*Payload, error) {
 
 	//decrypt payload
 	payload := &Payload{}
