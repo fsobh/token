@@ -1,20 +1,28 @@
 package token
 
 import (
-	"github.com/o1egl/paseto"
-	"golang.org/x/crypto/ed25519"
+	"aidanwoods.dev/go-paseto"
+	"fmt"
 	"time"
 )
 
 type PasetoV2Public struct {
-	paseto     *paseto.V2
-	privateKey ed25519.PrivateKey
-	publicKey  ed25519.PublicKey
+	privateKey paseto.V2AsymmetricSecretKey
+	publicKey  paseto.V2AsymmetricPublicKey
 }
 
-func NewPasetoV2Public(privateKey ed25519.PrivateKey, publicKey ed25519.PublicKey) (Maker, error) {
+func NewPasetoV2Public(privateKeyHex, publicKeyHex string) (*PasetoV2Public, error) {
+	privateKey, err := paseto.NewV2AsymmetricSecretKeyFromHex(privateKeyHex)
+	if err != nil {
+		return nil, fmt.Errorf("could not initialize private asymmetric key: %w", err)
+	}
+
+	publicKey, err := paseto.NewV2AsymmetricPublicKeyFromHex(publicKeyHex)
+	if err != nil {
+		return nil, fmt.Errorf("could not initialize public asymmetric key: %w", err)
+	}
+
 	maker := &PasetoV2Public{
-		paseto:     paseto.NewV2(),
 		privateKey: privateKey,
 		publicKey:  publicKey,
 	}
@@ -24,22 +32,47 @@ func NewPasetoV2Public(privateKey ed25519.PrivateKey, publicKey ed25519.PublicKe
 
 func (maker *PasetoV2Public) CreateToken(username string, duration time.Duration) (string, *Payload, error) {
 	payload, err := NewPayload(username, duration)
-
 	if err != nil {
-		return "", payload, err
+		return "", payload, fmt.Errorf("could not initialize payload: %w", err)
 	}
 
-	token, err := maker.paseto.Sign(maker.privateKey, payload, nil)
+	token := paseto.NewToken()
+	token.SetIssuedAt(time.Now())
+	token.SetNotBefore(time.Now())
+	token.SetExpiration(time.Now().Add(duration))
+	token.SetString("username", payload.Username)
+	token.Set("issued_at", payload.IssuedAt)
+	token.Set("expired_at", payload.ExpiredAt)
 
-	return token, payload, err
+	signedToken := token.V2Sign(maker.privateKey)
+	return signedToken, payload, nil
 }
 
 func (maker *PasetoV2Public) VerifyToken(token string) (*Payload, error) {
-	payload := &Payload{}
-	err := maker.paseto.Verify(token, maker.publicKey, payload, nil)
-
+	parsedToken, err := paseto.NewParser().ParseV2Public(maker.publicKey, token)
 	if err != nil {
 		return nil, ErrInvalidToken
+	}
+
+	username, err := parsedToken.GetString("username")
+	if err != nil {
+		return nil, ErrInvalidToken
+	}
+
+	issuedAt, err := parsedToken.GetIssuedAt()
+	if err != nil {
+		return nil, ErrInvalidToken
+	}
+
+	expiredAt, err := parsedToken.GetExpiration()
+	if err != nil {
+		return nil, ErrInvalidToken
+	}
+
+	payload := &Payload{
+		Username:  username,
+		IssuedAt:  issuedAt,
+		ExpiredAt: expiredAt,
 	}
 
 	err = payload.Valid()

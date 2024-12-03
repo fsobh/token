@@ -1,30 +1,38 @@
 package token
 
 import (
+	"aidanwoods.dev/go-paseto"
+	"encoding/hex"
 	"fmt"
-	"github.com/o1egl/paseto"
-	"golang.org/x/crypto/chacha20poly1305"
 	"time"
 )
 
 type PasetoV2Local struct {
-	paseto      *paseto.V2
-	symmetricKy []byte
+	symmetricKey paseto.V2SymmetricKey
 }
 
-func NewPasetoV2Local(symmetricKey string) (Maker, error) {
-
-	//Make sure the key is of same length as a paseto symmetric key
-	if len(symmetricKey) != chacha20poly1305.KeySize {
-		return nil, fmt.Errorf("invalid key size : must be %d characters", chacha20poly1305.KeySize)
+func NewPasetoV2Local(symmetricKeyHex string) (*PasetoV2Local, error) {
+	// Decode the hexadecimal symmetric key
+	keyBytes, err := hex.DecodeString(symmetricKeyHex)
+	if err != nil {
+		return nil, fmt.Errorf("invalid symmetric key hex")
 	}
 
-	maker := &PasetoV2Local{
-		paseto:      paseto.NewV2(),
-		symmetricKy: []byte(symmetricKey),
+	// Ensure the key is exactly 32 bytes, as required by the PASETO V2 specification
+	if len(keyBytes) != 32 {
+		return nil, fmt.Errorf("symmetric key must be 32 bytes long")
 	}
 
-	return maker, nil
+	// Use the key bytes to initialize the symmetric key
+	symmetricKey, err := paseto.V2SymmetricKeyFromBytes(keyBytes)
+
+	if err != nil {
+		return nil, fmt.Errorf("could not initialize symmetric keys from bytes : %d", err)
+	}
+
+	return &PasetoV2Local{
+		symmetricKey: symmetricKey,
+	}, nil
 }
 
 func (maker *PasetoV2Local) CreateToken(username string, duration time.Duration) (string, *Payload, error) {
@@ -33,25 +41,48 @@ func (maker *PasetoV2Local) CreateToken(username string, duration time.Duration)
 		return "", payload, err
 	}
 
-	token, err := maker.paseto.Encrypt(maker.symmetricKy, payload, nil)
+	token := paseto.NewToken()
+	token.SetIssuedAt(time.Now())
+	token.SetNotBefore(time.Now())
+	token.SetExpiration(time.Now().Add(duration))
+	token.SetString("username", payload.Username)
+	token.Set("issued_at", payload.IssuedAt)
+	token.Set("expired_at", payload.ExpiredAt)
 
-	return token, payload, err
+	encryptedToken := token.V2Encrypt(maker.symmetricKey)
+	return encryptedToken, payload, nil
 }
 
 func (maker *PasetoV2Local) VerifyToken(token string) (*Payload, error) {
-
-	//decrypt payload
-	payload := &Payload{}
-	err := maker.paseto.Decrypt(token, maker.symmetricKy, payload, nil)
-
+	parsedToken, err := paseto.NewParser().ParseV2Local(maker.symmetricKey, token)
 	if err != nil {
 		return nil, ErrInvalidToken
 	}
 
-	err = payload.Valid()
-
+	username, err := parsedToken.GetString("username")
 	if err != nil {
-		return nil, err
+		return nil, ErrInvalidToken
+	}
+
+	issuedAt, err := parsedToken.GetIssuedAt()
+	if err != nil {
+		return nil, ErrInvalidToken
+	}
+
+	expiredAt, err := parsedToken.GetExpiration()
+	if err != nil {
+		return nil, ErrInvalidToken
+	}
+
+	payload := &Payload{
+		Username:  username,
+		IssuedAt:  issuedAt,
+		ExpiredAt: expiredAt,
+	}
+
+	err = payload.Valid()
+	if err != nil {
+		return nil, ErrExpiredToken
 	}
 
 	return payload, nil
