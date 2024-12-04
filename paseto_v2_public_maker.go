@@ -41,8 +41,6 @@ func (maker *PasetoV2Public) CreateToken(username string, duration time.Duration
 	token.SetNotBefore(time.Now())
 	token.SetExpiration(time.Now().Add(duration))
 	token.SetString("username", payload.Username)
-	token.Set("issued_at", payload.IssuedAt)
-	token.Set("expired_at", payload.ExpiredAt)
 
 	signedToken := token.V2Sign(maker.privateKey)
 	return signedToken, payload, nil

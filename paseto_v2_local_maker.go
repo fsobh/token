@@ -46,8 +46,6 @@ func (maker *PasetoV2Local) CreateToken(username string, duration time.Duration)
 	token.SetNotBefore(time.Now())
 	token.SetExpiration(time.Now().Add(duration))
 	token.SetString("username", payload.Username)
-	token.Set("issued_at", payload.IssuedAt)
-	token.Set("expired_at", payload.ExpiredAt)
 
 	encryptedToken := token.V2Encrypt(maker.symmetricKey)
 	return encryptedToken, payload, nil
