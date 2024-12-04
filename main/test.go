@@ -34,4 +34,19 @@ func main() {
 	verified, err := maker.VerifyToken(accessToken)
 
 	fmt.Println(verified)
+
+	sym, err := token.NewPasetoV2Local(publicKeyString)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	accessToken, payload, err = sym.CreateToken("username", time.Duration(10)*time.Minute)
+
+	fmt.Println(accessToken)
+	fmt.Println(payload)
+
+	verified, err = sym.VerifyToken(accessToken)
+
+	fmt.Println(verified)
 }
