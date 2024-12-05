@@ -19,18 +19,29 @@ func DemonstrateV2Public(privateKeyHex, publicKeyHex string) error {
 	if err != nil {
 		return fmt.Errorf("failed to create token: %w", err)
 	}
-	fmt.Printf("Created token: %s\n", tokenString)
+
+	// Display token and payload in JSON
+	fmt.Println("Created Token (JSON):")
+	fmt.Println(toJSON(map[string]interface{}{
+		"token":      tokenString,
+		"payload":    payload,
+		"expiration": payload.ExpiredAt,
+	}))
 
 	// Verify the token
-	payload, err = maker.VerifyToken(tokenString)
+	verifiedPayload, err := maker.VerifyToken(tokenString)
 	if err != nil {
 		return fmt.Errorf("failed to verify token: %w", err)
 	}
-	fmt.Printf("Verified token payload: %+v\n", payload)
+
+	// Display verified payload in JSON
+	fmt.Println("Verified Payload (JSON):")
+	fmt.Println(toJSON(verifiedPayload))
 
 	return nil
 }
 
+// DemonstrateV2Local shows how to use PasetoV2Local tokens
 func DemonstrateV2Local(symmetricKeyHex string) error {
 	// Initialize the maker
 	maker, err := token.NewPasetoV2Local(symmetricKeyHex)
@@ -43,14 +54,24 @@ func DemonstrateV2Local(symmetricKeyHex string) error {
 	if err != nil {
 		return fmt.Errorf("failed to create token: %w", err)
 	}
-	fmt.Printf("Created token: %s\n", tokenString)
+
+	// Display token and payload in JSON
+	fmt.Println("Created Token (JSON):")
+	fmt.Println(toJSON(map[string]interface{}{
+		"token":      tokenString,
+		"payload":    payload,
+		"expiration": payload.ExpiredAt,
+	}))
 
 	// Verify the token
-	payload, err = maker.VerifyToken(tokenString)
+	verifiedPayload, err := maker.VerifyToken(tokenString)
 	if err != nil {
 		return fmt.Errorf("failed to verify token: %w", err)
 	}
-	fmt.Printf("Verified token payload: %+v\n", payload)
+
+	// Display verified payload in JSON
+	fmt.Println("Verified Payload (JSON):")
+	fmt.Println(toJSON(verifiedPayload))
 
 	return nil
 }

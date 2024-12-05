@@ -3,6 +3,7 @@ package token
 import (
 	"aidanwoods.dev/go-paseto"
 	"fmt"
+	"github.com/google/uuid"
 	"time"
 )
 
@@ -41,6 +42,7 @@ func (maker *PasetoV3Public) CreateToken(username string, duration time.Duration
 	token.SetNotBefore(time.Now())
 	token.SetExpiration(time.Now().Add(duration))
 	token.SetString("username", payload.Username)
+	token.SetString("id", payload.ID.String())
 
 	signedToken := token.V3Sign(maker.privateKey, nil)
 	return signedToken, payload, nil
@@ -48,6 +50,16 @@ func (maker *PasetoV3Public) CreateToken(username string, duration time.Duration
 
 func (maker *PasetoV3Public) VerifyToken(token string) (*Payload, error) {
 	parsedToken, err := paseto.NewParser().ParseV3Public(maker.publicKey, token, nil)
+	if err != nil {
+		return nil, ErrInvalidToken
+	}
+
+	idString, err := parsedToken.GetString("id")
+	if err != nil {
+		return nil, ErrInvalidToken
+	}
+
+	id, err := uuid.Parse(idString)
 	if err != nil {
 		return nil, ErrInvalidToken
 	}
@@ -68,6 +80,7 @@ func (maker *PasetoV3Public) VerifyToken(token string) (*Payload, error) {
 	}
 
 	payload := &Payload{
+		ID:        id,
 		Username:  username,
 		IssuedAt:  issuedAt,
 		ExpiredAt: expiredAt,
