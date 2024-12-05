@@ -1,4 +1,4 @@
-package main
+package demo
 
 import (
 	"fmt"
@@ -6,16 +6,16 @@ import (
 	"time"
 )
 
-// DemonstrateV2Public shows how to use PasetoV2Public tokens
-func DemonstrateV2Public(privateKeyHex, publicKeyHex string) error {
+// DemonstrateV3Local shows how to use PasetoV3Local tokens
+func DemonstrateV3Local(symmetricKeyHex string) error {
 	// Initialize the maker
-	maker, err := token.NewPasetoV2Public(privateKeyHex, publicKeyHex)
+	maker, err := token.NewPasetoV3Local(symmetricKeyHex)
 	if err != nil {
 		return fmt.Errorf("failed to create token maker: %w", err)
 	}
 
 	// Create a token
-	tokenString, payload, err := maker.CreateToken("charlie", 24*time.Hour)
+	tokenString, payload, err := maker.CreateToken("bob", 24*time.Hour)
 	if err != nil {
 		return fmt.Errorf("failed to create token: %w", err)
 	}
@@ -31,15 +31,16 @@ func DemonstrateV2Public(privateKeyHex, publicKeyHex string) error {
 	return nil
 }
 
-func DemonstrateV2Local(symmetricKeyHex string) error {
+// DemonstrateV3Public shows how to use PasetoV3Public tokens
+func DemonstrateV3Public(privateKeyHex, publicKeyHex string) error {
 	// Initialize the maker
-	maker, err := token.NewPasetoV2Local(symmetricKeyHex)
+	maker, err := token.NewPasetoV3Public(privateKeyHex, publicKeyHex)
 	if err != nil {
 		return fmt.Errorf("failed to create token maker: %w", err)
 	}
 
 	// Create a token
-	tokenString, payload, err := maker.CreateToken("alice", 24*time.Hour)
+	tokenString, payload, err := maker.CreateToken("dave", 24*time.Hour)
 	if err != nil {
 		return fmt.Errorf("failed to create token: %w", err)
 	}

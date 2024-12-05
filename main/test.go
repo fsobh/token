@@ -3,6 +3,7 @@ package main
 import (
 	"aidanwoods.dev/go-paseto"
 	"fmt"
+	"github.com/fsobh/token/main/demo"
 )
 
 func main() {
@@ -14,7 +15,7 @@ func main() {
 	symmetricKeyV2 := paseto.NewV2SymmetricKey()
 
 	privateKeyV3 := paseto.NewV3AsymmetricSecretKey()
-	publicKeyV3 := privateKeyV2.Public()
+	publicKeyV3 := privateKeyV3.Public()
 
 	symmetricKeyV3 := paseto.NewV3SymmetricKey()
 
@@ -30,19 +31,19 @@ func main() {
 	symmetricKeyStringV3 := symmetricKeyV3.ExportHex()
 
 	// Demonstrate each token type
-	if err := DemonstrateV2Local(symmetricKeyStringV2); err != nil {
+	if err := demo.DemonstrateV2Local(symmetricKeyStringV2); err != nil {
 		fmt.Printf("V2 Local demo failed: %v\n", err)
 	}
 
-	if err := DemonstrateV3Local(symmetricKeyStringV3); err != nil {
-		fmt.Printf("V3 Local demo failed: %v\n", err)
-	}
-
-	if err := DemonstrateV2Public(privateKeyStringV2, publicKeyStringV2); err != nil {
+	if err := demo.DemonstrateV2Public(privateKeyStringV2, publicKeyStringV2); err != nil {
 		fmt.Printf("V2 Public demo failed: %v\n", err)
 	}
 
-	if err := DemonstrateV3Public(privateKeyStringV3, publicKeyStringV3); err != nil {
+	if err := demo.DemonstrateV3Local(symmetricKeyStringV3); err != nil {
+		fmt.Printf("V3 Local demo failed: %v\n", err)
+	}
+
+	if err := demo.DemonstrateV3Public(privateKeyStringV3, publicKeyStringV3); err != nil {
 		fmt.Printf("V3 Public demo failed: %v\n", err)
 	}
 }
