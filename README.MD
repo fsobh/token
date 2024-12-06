@@ -1,5 +1,6 @@
-
 # Authentication token module for Golang
+
+![Coverage](./coverage.svg)
 
 A Golang module for generating & verifying various types of authentication tokens seamlessly using [JWT](https://en.wikipedia.org/wiki/JSON_Web_Token) or [PASETO](https://paseto.io/).
 

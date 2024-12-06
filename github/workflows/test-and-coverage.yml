@@ -1,0 +1,64 @@
+name: Test and Coverage
+
+on:
+  push:
+    branches: [adding-paseto-v3-v4-support]
+  pull_request:
+    branches: [adding-paseto-v3-v4-support]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Set up Go environment
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.18'
+
+      # Step 2: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 3: Run tests and generate coverage report
+      - name: Run tests and generate coverage report
+        id: test
+        run: |
+          go test -coverprofile=coverage.out .
+          COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}')
+          echo "coverage=$COVERAGE" >> $GITHUB_ENV
+
+      # Step 4: Generate coverage badge
+      - name: Generate coverage badge
+        uses: schneegans/dynamic-badges-action@v1.4.0
+        with:
+          auth: ${{ secrets.GITHUB_TOKEN }}
+          path: ./coverage.svg
+          type: coverage
+          value: ${{ env.coverage }}
+          status: ${{ env.coverage }}
+          label: Coverage
+
+      # Step 5: Update README.md
+      - name: Update README.md with badge
+        run: |
+          if grep -q "![Coverage](./coverage.svg)" README.md; then
+            echo "Coverage badge already exists in README.md"
+          else
+            echo "Adding coverage badge to README.md"
+            echo "![Coverage](./coverage.svg)" >> README.md
+          fi
+        env:
+          COVERAGE: ${{ env.coverage }}
+
+      # Step 6: Commit and push changes
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md coverage.svg
+          git commit -m "Update coverage badge [skip ci]" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
