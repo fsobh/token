@@ -1,6 +1,6 @@
 module github.com/fsobh/token
 
-go 1.23.2
+go 1.23
 
 require (
 	aidanwoods.dev/go-paseto v1.5.2
