@@ -7,28 +7,28 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestPasetoV2Local(t *testing.T) {
+func TestPasetoV3Local(t *testing.T) {
 	// Valid 32-byte hex key for testing
 	symmetricKey := "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
 
-	t.Run("NewPasetoV2Local", func(t *testing.T) {
-		maker, err := NewPasetoV2Local(symmetricKey)
+	t.Run("NewPasetoV3Local", func(t *testing.T) {
+		maker, err := NewPasetoV3Local(symmetricKey)
 		require.NoError(t, err)
 		require.NotNil(t, maker)
 
 		// Test invalid hex string (this error occurs first)
-		_, err = NewPasetoV2Local("too_short")
+		_, err = NewPasetoV3Local("too_short")
 		require.Error(t, err)
 		require.Equal(t, "invalid symmetric key hex", err.Error())
 
 		// Test invalid key length (using valid hex but wrong length)
-		_, err = NewPasetoV2Local("0123456789abcdef") // valid hex but too short
+		_, err = NewPasetoV3Local("0123456789abcdef") // valid hex but too short
 		require.Error(t, err)
 		require.Equal(t, "symmetric key must be 32 bytes long", err.Error())
 	})
 
 	t.Run("CreateAndVerifyToken", func(t *testing.T) {
-		maker, err := NewPasetoV2Local(symmetricKey)
+		maker, err := NewPasetoV3Local(symmetricKey)
 		require.NoError(t, err)
 
 		username := "test_user"
@@ -53,7 +53,7 @@ func TestPasetoV2Local(t *testing.T) {
 	})
 
 	t.Run("ExpiredToken", func(t *testing.T) {
-		maker, err := NewPasetoV2Local(symmetricKey)
+		maker, err := NewPasetoV3Local(symmetricKey)
 		require.NoError(t, err)
 
 		// Create token with -1 minute duration (already expired)
@@ -65,22 +65,61 @@ func TestPasetoV2Local(t *testing.T) {
 		verifiedPayload, err := maker.VerifyToken(token)
 		require.Error(t, err)
 		require.Nil(t, verifiedPayload)
-		// The error message contains additional context, so we check if it contains our expected error
-		require.Contains(t, err.Error(), ErrExpiredToken.Error())
+		require.Contains(t, err.Error(), "could not parse payload: this token has expired")
 	})
 
 	t.Run("InvalidToken", func(t *testing.T) {
-		maker, err := NewPasetoV2Local(symmetricKey)
+		maker, err := NewPasetoV3Local(symmetricKey)
 		require.NoError(t, err)
 
 		// Try to verify invalid token
 		verifiedPayload, err := maker.VerifyToken("invalid.token.format")
 		require.Error(t, err)
+		require.Contains(t, err.Error(), "could not parse payload")
 		require.Nil(t, verifiedPayload)
 
 		// Try to verify empty token
 		verifiedPayload, err = maker.VerifyToken("")
 		require.Error(t, err)
+		require.Contains(t, err.Error(), "could not parse payload")
 		require.Nil(t, verifiedPayload)
 	})
-} 
+
+	t.Run("WrongKey", func(t *testing.T) {
+		maker, err := NewPasetoV3Local(symmetricKey)
+		require.NoError(t, err)
+
+		// Create token
+		token, _, err := maker.CreateToken("test_user", time.Minute)
+		require.NoError(t, err)
+
+		// Create new maker with different key
+		differentKey := "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+		wrongMaker, err := NewPasetoV3Local(differentKey)
+		require.NoError(t, err)
+
+		// Verify should fail because symmetric key doesn't match
+		verifiedPayload, err := wrongMaker.VerifyToken(token)
+		require.Error(t, err)
+		require.Contains(t, err.Error(), "could not parse payload")
+		require.Nil(t, verifiedPayload)
+	})
+
+	t.Run("InvalidUUID", func(t *testing.T) {
+		maker, err := NewPasetoV3Local(symmetricKey)
+		require.NoError(t, err)
+
+		// Create token
+		token, _, err := maker.CreateToken("test_user", time.Minute)
+		require.NoError(t, err)
+
+		// Tamper with the token to make UUID invalid
+		tamperedToken := token + "tampered"
+
+		// Verify should fail because token is tampered
+		verifiedPayload, err := maker.VerifyToken(tamperedToken)
+		require.Error(t, err)
+		require.Contains(t, err.Error(), "could not parse payload")
+		require.Nil(t, verifiedPayload)
+	})
+}

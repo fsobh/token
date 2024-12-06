@@ -85,10 +85,5 @@ func (maker *PasetoV2Public) VerifyToken(token string) (*Payload, error) {
 		ExpiredAt: expiredAt,
 	}
 
-	err = payload.Valid()
-	if err != nil {
-		return nil, ErrExpiredToken
-	}
-
 	return payload, nil
 }

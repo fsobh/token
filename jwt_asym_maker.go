@@ -37,7 +37,7 @@ func (maker *AsymJWTMaker) CreateToken(username string, duration time.Duration) 
 func (maker *AsymJWTMaker) VerifyToken(token string) (*Payload, error) {
 	keyFunc := func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodEd25519); !ok {
-			return nil, ErrInvalidMethod
+			return nil, ErrExpiredToken
 		}
 		return maker.publicKey, nil
 	}

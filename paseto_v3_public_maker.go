@@ -51,7 +51,7 @@ func (maker *PasetoV3Public) CreateToken(username string, duration time.Duration
 func (maker *PasetoV3Public) VerifyToken(token string) (*Payload, error) {
 	parsedToken, err := paseto.NewParser().ParseV3Public(maker.publicKey, token, nil)
 	if err != nil {
-		return nil, ErrInvalidToken
+		return nil, fmt.Errorf("could not parse payload: %s", err)
 	}
 
 	idString, err := parsedToken.GetString("id")
@@ -61,7 +61,7 @@ func (maker *PasetoV3Public) VerifyToken(token string) (*Payload, error) {
 
 	id, err := uuid.Parse(idString)
 	if err != nil {
-		return nil, ErrInvalidToken
+		return nil, fmt.Errorf("could not parse guid to string: %s", err)
 	}
 
 	username, err := parsedToken.GetString("username")
@@ -84,11 +84,6 @@ func (maker *PasetoV3Public) VerifyToken(token string) (*Payload, error) {
 		Username:  username,
 		IssuedAt:  issuedAt,
 		ExpiredAt: expiredAt,
-	}
-
-	err = payload.Valid()
-	if err != nil {
-		return nil, ErrExpiredToken
 	}
 
 	return payload, nil

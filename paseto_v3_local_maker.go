@@ -64,7 +64,7 @@ func (maker *PasetoV3Local) VerifyToken(token string) (*Payload, error) {
 	// Parse the encrypted token
 	parsedToken, err := paseto.NewParser().ParseV3Local(maker.symmetricKey, token, nil)
 	if err != nil {
-		return nil, ErrInvalidToken
+		return nil, fmt.Errorf("could not parse payload: %s", err)
 	}
 
 	idString, err := parsedToken.GetString("id")
@@ -74,10 +74,9 @@ func (maker *PasetoV3Local) VerifyToken(token string) (*Payload, error) {
 
 	id, err := uuid.Parse(idString)
 	if err != nil {
-		return nil, ErrInvalidToken
+		return nil, fmt.Errorf("could not parse guid to string: %s", err)
 	}
 
-	// Extract claims from the token
 	username, err := parsedToken.GetString("username")
 	if err != nil {
 		return nil, ErrInvalidToken
@@ -93,17 +92,11 @@ func (maker *PasetoV3Local) VerifyToken(token string) (*Payload, error) {
 		return nil, ErrInvalidToken
 	}
 
-	// Construct the payload
 	payload := &Payload{
 		ID:        id,
 		Username:  username,
 		IssuedAt:  issuedAt,
 		ExpiredAt: expiredAt,
-	}
-
-	// Validate the payload
-	if err := payload.Valid(); err != nil {
-		return nil, ErrExpiredToken
 	}
 
 	return payload, nil
