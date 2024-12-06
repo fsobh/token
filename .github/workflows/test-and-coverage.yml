@@ -38,7 +38,7 @@ jobs:
             # Calculate dynamic width
             # Base width for the "Coverage" label + dynamic width for the coverage text
             TEXT_WIDTH=$((10 + (${#COVERAGE} * 8))) # 8px per character for the coverage text
-            BADGE_WIDTH=$((70 + TEXT_WIDTH + 10)) # 70px for "Coverage" label + text width + 10px padding
+            BADGE_WIDTH=$((70 + TEXT_WIDTH)) # 70px for "Coverage" label + text width + 10px padding
 
           echo "<svg xmlns='http://www.w3.org/2000/svg' width='${BADGE_WIDTH}' height='20'>
           <rect width='${BADGE_WIDTH}' height='20' fill='#555'/>
