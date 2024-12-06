@@ -2,9 +2,9 @@ name: Test and Coverage
 
 on:
   push:
-    branches: [main]
+    branches: [adding-paseto-v3-v4-support]
   pull_request:
-    branches: [main]
+    branches: [adding-paseto-v3-v4-support]
 
 jobs:
   build:
