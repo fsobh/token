@@ -62,12 +62,22 @@ func TestCreateTokenPV2L(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name:            "Token Expired",
+			symmetricKeyHex: "bc11fab585bca18ad287c5a5c3070153d13f3e8d52a50180a93ca3072f0262a1",
+			user: user{
+				username: "johndoe",
+				duration: -1 * time.Minute,
+			},
+			wantErr: true,
+		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			_, err := NewPasetoV2Local(tc.symmetricKeyHex)
 			if tc.wantErr {
+
 				assert.Error(t, err)
 			} else {
 				maker, err := NewPasetoV2Local(tc.symmetricKeyHex)
@@ -83,7 +93,7 @@ func TestCreateTokenPV2L(t *testing.T) {
 				verifiedPayload, err := maker.VerifyToken(token)
 
 				assert.Equal(t, payload.Username, verifiedPayload.Username)
-				// add more assertions
+				assert.Equal(t, verifiedPayload.ID, payload.ID)
 
 				assert.NoError(t, err)
 			}
