@@ -16,7 +16,7 @@ A Golang module for generating & verifying various types of authentication token
 Get started by installing the package:
 
 ```sh 
-go get github.com/fsobh/token
+go get .github.com/fsobh/token
 ```
 
 ---
