@@ -30,7 +30,7 @@ func main() {
 
 	symmetricKeyStringV3 := symmetricKeyV3.ExportHex()
 
-	// Demonstrate each token type
+	//// Demonstrate each token type
 	if err := demo.DemonstrateV2Local(symmetricKeyStringV2); err != nil {
 		fmt.Printf("V2 Local demo failed: %v\n", err)
 	}
@@ -46,4 +46,5 @@ func main() {
 	if err := demo.DemonstrateV3Public(privateKeyStringV3, publicKeyStringV3); err != nil {
 		fmt.Printf("V3 Public demo failed: %v\n", err)
 	}
+
 }
