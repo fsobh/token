@@ -50,12 +50,11 @@ jobs:
       # Step 5: Update README.MD with badge
       - name: Update README.MD
         run: |
-          if grep -q "![Coverage](./coverage.svg)" README.MD; then
-            echo "Coverage badge already exists in README.MD"
-          else
-            echo "Adding coverage badge to README.MD"
-            echo "![Coverage](./coverage.svg)" >> README.MD
-          fi
+          # Remove any existing coverage badges
+          sed -i '/!\[Coverage\](\.\/coverage\.svg)/d' README.MD
+          
+          # Add the coverage badge at the top of the file (after the first line)
+          sed -i '1 a\![Coverage](./coverage.svg)' README.MD
 
       # Step 6: Commit and push changes
       - name: Commit and push changes
