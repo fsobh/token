@@ -257,7 +257,7 @@ Before getting started with token, ensure your runtime environment meets the fol
 ### 🤖 Usage
 
 ```sh
-❯ go run {entrypoint}
+❯ go run {entrypointt}
 ```
 
 
