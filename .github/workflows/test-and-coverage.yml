@@ -47,14 +47,14 @@ jobs:
           <text x='80' y='15' fill='#000' font-family='Verdana' font-size='11'>${COVERAGE}</text>
           </svg>" > coverage.svg
 
-      # Step 5: Update README.md with badge
-      - name: Update README.md
+      # Step 5: Update README.MD with badge
+      - name: Update README.MD
         run: |
-          if grep -q "![Coverage](./coverage.svg)" README.md; then
-            echo "Coverage badge already exists in README.md"
+          if grep -q "![Coverage](./coverage.svg)" README.MD; then
+            echo "Coverage badge already exists in README.MD"
           else
-            echo "Adding coverage badge to README.md"
-            echo "![Coverage](./coverage.svg)" >> README.md
+            echo "Adding coverage badge to README.MD"
+            echo "![Coverage](./coverage.svg)" >> README.MD
           fi
 
       # Step 6: Commit and push changes
@@ -62,7 +62,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add coverage.svg README.md
+          git add coverage.svg README.MD
           git commit -m "Update coverage badge [skip ci]" || echo "No changes to commit"
           git push
         env:
