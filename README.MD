@@ -4,7 +4,7 @@
 
 <p align="left">
   <img src="https://img.shields.io/github/license/fsobh/token?style=plastic&logo=opensourceinitiative&logoColor=white&color=2691fb" alt="license">
-  <img src="https://img.shields.io/badge/Coverage-57.7%25-2691fb?style=plastic&logo=none&logoColor=white&labelColor=555555&borderRadius=10" alt="coverage">
+  <img src="https://img.shields.io/badge/Coverage-83.6%25-2691fb?style=plastic&logo=none&logoColor=white&labelColor=555555&borderRadius=10" alt="coverage">
   <img src="https://img.shields.io/github/last-commit/fsobh/token?style=plastic&logo=git&logoColor=white&color=2691fb" alt="last-commit">
   <img src="https://img.shields.io/github/languages/top/fsobh/token?style=plastic&color=2691fb" alt="repo-top-language">
   <img src="https://img.shields.io/github/languages/count/fsobh/token?style=plastic&color=2691fb" alt="repo-language-count">
