@@ -29,17 +29,17 @@ jobs:
           COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}')
           echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
 
-      # Step 4: Generate badge
+      # Step 4: Update README.MD with coverage badge
       - name: Update README.MD
         run: |
           # Extract coverage value (remove the % symbol if present)
           COVERAGE=$(echo "${{ env.COVERAGE }}" | tr -d '%')
           
-          # First, remove all existing coverage badges to prevent duplicates
+          # First, remove any existing coverage badges
           sed -i '/<img.*Coverage.*>/d' README.MD
           
-          # Add the coverage badge after the last-commit badge using shields.io URL directly
-          sed -i "/<img.*last-commit.*>/a\  <img src=\"https://img.shields.io/badge/Coverage-${COVERAGE}%25-2691fb?style=plastic&logo=none&logoColor=white&labelColor=555555&borderRadius=10\" alt=\"coverage\">" README.MD
+          # Add the coverage badge after the license badge
+          sed -i "/<img.*license.*>/a\  <img src=\"https://img.shields.io/badge/Coverage-${COVERAGE}%25-2691fb?style=plastic&logo=none&logoColor=white&labelColor=555555&borderRadius=10\" alt=\"coverage\">" README.MD
 
       # Step 5: Commit and push changes
       - name: Commit and push changes

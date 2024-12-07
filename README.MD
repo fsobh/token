@@ -5,7 +5,6 @@
 <p align="left">
   <img src="https://img.shields.io/github/license/fsobh/token?style=plastic&logo=opensourceinitiative&logoColor=white&color=2691fb" alt="license">
   <img src="https://img.shields.io/github/last-commit/fsobh/token?style=plastic&logo=git&logoColor=white&color=2691fb" alt="last-commit">
-  <img src="./coverage.svg" alt="coverage">
   <img src="https://img.shields.io/github/languages/top/fsobh/token?style=plastic&color=2691fb" alt="repo-top-language">
   <img src="https://img.shields.io/github/languages/count/fsobh/token?style=plastic&color=2691fb" alt="repo-language-count">
 </p>
