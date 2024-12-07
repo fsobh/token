@@ -35,8 +35,8 @@ jobs:
           # Extract coverage value (remove the % symbol if present)
           COVERAGE=$(echo "${{ env.COVERAGE }}" | tr -d '%')
           
-          # Create a shields.io URL with matching style
-          echo "<img src=\"https://img.shields.io/badge/Coverage-${COVERAGE}%25-2691fb?style=plastic\" alt=\"coverage\">" > coverage.svg
+          # Create a shields.io URL with matching style and rounded corners
+          echo "<img src=\"https://img.shields.io/badge/Coverage-${COVERAGE}%25-2691fb?style=plastic&logo=none&logoColor=white&labelColor=555555&borderRadius=10\" alt=\"coverage\">" > coverage.svg
 
       # Step 5: Update README.MD with badge
       - name: Update README.MD
