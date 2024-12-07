@@ -41,11 +41,11 @@ jobs:
       # Step 5: Update README.MD with badge
       - name: Update README.MD
         run: |
-          # Remove any existing coverage badges
-          sed -i '/<img.*Coverage.*>/d' README.MD
+          # First, remove all existing coverage badges to prevent duplicates
+          sed -i '/<img.*coverage\.svg.*>/d' README.MD
           
-          # Add the coverage badge in the first <p> tag with the other badges
-          sed -i '/<img.*repo-top-language.*>/i\  <img src="./coverage.svg" alt="coverage">' README.MD
+          # Add the coverage badge after the last-commit badge
+          sed -i '/<img.*last-commit.*>/a\  <img src="./coverage.svg" alt="coverage">' README.MD
 
       # Step 6: Commit and push changes
       - name: Commit and push changes
