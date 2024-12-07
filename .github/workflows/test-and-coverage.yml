@@ -1,0 +1,68 @@
+name: Test and Coverage
+
+on:
+  push:
+    branches: [adding-paseto-v3-v4-support]
+  pull_request:
+    branches: [adding-paseto-v3-v4-support]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Set up Go environment
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.23'
+
+      # Step 2: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 3: Run tests and generate coverage report
+      - name: Run tests and generate coverage report
+        id: test
+        run: |
+          go test -coverprofile=coverage.out ./...
+          COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}')
+          echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
+
+      # Step 4: Generate badge locally
+      - name: Generate badge
+        run: |
+          # Extract coverage value
+            COVERAGE="${{ env.COVERAGE }}"
+  
+            # Calculate dynamic width
+            # Base width for the "Coverage" label + dynamic width for the coverage text
+            TEXT_WIDTH=$((10 + (${#COVERAGE} * 8))) # 8px per character for the coverage text
+            BADGE_WIDTH=$((70 + TEXT_WIDTH)) # 70px for "Coverage" label + text width + 10px padding
+
+          echo "<svg xmlns='http://www.w3.org/2000/svg' width='${BADGE_WIDTH}' height='20'>
+          <rect width='${BADGE_WIDTH}' height='20' fill='#555'/>
+          <rect x='70' width='${TEXT_WIDTH}' height='20' fill='#4c1'/>
+          <text x='10' y='15' fill='#fff' font-family='Verdana' font-size='11'>Coverage</text>
+          <text x='80' y='15' fill='#000' font-family='Verdana' font-size='11'>${COVERAGE}</text>
+          </svg>" > coverage.svg
+
+      # Step 5: Update README.MD with badge
+      - name: Update README.MD
+        run: |
+          # Remove any existing coverage badges
+          sed -i '/!\[Coverage\](\.\/coverage\.svg)/d' README.MD
+          
+          # Add the coverage badge at the top of the file (after the first line)
+          sed -i '1 a\![Coverage](./coverage.svg)' README.MD
+
+      # Step 6: Commit and push changes
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add coverage.svg README.MD
+          git commit -m "Update coverage badge [skip ci]" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
