@@ -12,3 +12,13 @@ func toJSON(data interface{}) string {
 	}
 	return string(jsonBytes)
 }
+
+// Helper function to generate random string
+func RandomString(n int) string {
+	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = letters[i%len(letters)]
+	}
+	return string(b)
+}
