@@ -512,6 +512,10 @@ func main() {
 	fmt.Println("Verified Payload (JSON):")
 	fmt.Println(toJSON(jwtVerifiedPayloadAsymmetric))
 
+
+
+
+
 	// ** JWT Symmetric **
 
 	symmetricKey := "abcdefghijklmnopqrstuvwxyzABCDEF"
